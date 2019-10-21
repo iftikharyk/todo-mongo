@@ -2,7 +2,7 @@
 
 const mongoose = require('mongoose');
 
-const task = mongoose.model('Task');
+const task = mongoose.model('Tasks');
 
 exports.list_all_tasks = function(req, res) {
     task.find({}, function(err, task) {
@@ -35,8 +35,12 @@ exports.read_a_task = function(req, res) {
     });
 }
 
+exports.not_found = function(req, res) {
+    res.status(404).send({"data":"page not found"})
+}
+
 exports.update_a_task = function(req, res) {
-    task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, function(err, task) {
+    task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true, useFindAndModify: false}, function(err, task) {
         if (err) {
             res.send(err);
         } else {
